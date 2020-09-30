@@ -1,0 +1,7 @@
+# ENV
+
+venv/
+.DS_Store
+.DS_Store/
+.vs_code
+.vs_code/
