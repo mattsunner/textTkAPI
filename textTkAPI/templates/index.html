@@ -1,1 +1,10 @@
-{% extends 'base.html' %} {% block index %} {% endblock %}
+{% extends 'base.html' %} {% block index %}
+
+<form action="tokenize" method="POST">
+  <label for="tokens">Sentence Tokenizer</label>
+  <input type="tokens" name="tokens" value="" required />
+  <br />
+  <input type="submit" value="Tokenize" />
+</form>
+
+{% endblock %}
