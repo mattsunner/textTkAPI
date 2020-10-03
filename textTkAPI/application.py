@@ -3,6 +3,18 @@ import nltk
 import pandas as pd
 import numpy as np
 import re
+from nltk import pos_tag, pos_tag_sents
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import wordnet
+from nltk.stem.porter import PorterStemmer
+from nltk.util import ngrams
+
+nltk.download('wordnet')
+nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
 
 
 app = Flask(__name__)
@@ -68,6 +80,48 @@ def tokenize():
     dfTokens['token'] = dfTokens['token'].apply(
         lambda x: expand_contractions(x))
 
+    
+    lemmatizer = nltk.stem.WordNetLemmatizer()
+    wordnet_lemmatizer = WordNetLemmatizer()
+
+    def nltk_tag_to_wordnet_tag(nltk_tag):
+        if nltk_tag.startswith('J'):
+            return wordnet.ADJ
+        elif nltk_tag.startswith('V'):
+            return wordnet.VERB
+        elif nltk_tag.startswith('N'):
+            return wordnet.NOUN
+        elif nltk_tag.startswith('R'):
+            return wordnet.ADV
+        else:
+            return None
+
+    def lemmatize_sentence(sentence):
+        #tokenize the sentence and find the POS tag for each token
+        nltk_tagged = nltk.pos_tag(nltk.word_tokenize(sentence))
+        #tuple of (token, wordnet_tag)
+        wordnet_tagged = map(lambda x: (x[0], nltk_tag_to_wordnet_tag(x[1])), nltk_tagged)
+        lemmatized_sentence = []
+        for word, tag in wordnet_tagged:
+            if tag is None:
+                #if there is no available tag, append the token as is
+                lemmatized_sentence.append(word)
+            else:
+                #else use the tag to lemmatize the token
+                lemmatized_sentence.append(lemmatizer.lemmatize(word, tag))
+        return " ".join(lemmatized_sentence)
+
+
+    dfTokens['lemmatized'] = dfTokens['token'].apply(lambda x: lemmatize_sentence(x))
+
+    stopword_list = stopwords.words('english')
+
+    dfTokens['lemmatized'] = dfTokens['lemmatized'].str.lower()
+    dfTokens['lemmatized'] = dfTokens['lemmatized'].str.replace('[^\w\s]','').apply(word_tokenize)
+    dfTokens['lemmatized'] = dfTokens['lemmatized'].apply(lambda x: [item for item in x if item not in stopword_list])
+
+    dfTokens = dfTokens.drop(columns=['token'])
+    print(dfTokens)
     tokensraw = dfTokens.values.tolist()
     tokens = tokensraw
 
