@@ -1,10 +1,10 @@
 {% extends 'base.html' %} {% block index %}
-
-<form action="tokenize" method="POST">
-  <label for="tokens">Sentence Tokenizer</label>
-  <textarea id="tokens" name="tokens" rows="4" cols="50"> </textarea>
-  <br />
-  <input type="submit" value="Tokenize" />
-</form>
-
+<h3 class="heading-3">Sentence Lemmatizer</h3>
+<div class="form-group center">
+  <form action="tokenize" method="POST">
+    <textarea id="tokens" name="tokens" rows="6" cols="75"> </textarea>
+    <br />
+    <input type="submit" class="btn btn-dark" value="Lemmatize" />
+  </form>
+</div>
 {% endblock %}
