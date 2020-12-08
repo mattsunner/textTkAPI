@@ -94,3 +94,9 @@ def lemmatize_sentence(sentence):
             # else use the tag to lemmatize the token
             lemmatized_sentence.append(lemmatizer.lemmatize(word, tag))
     return " ".join(lemmatized_sentence)
+
+
+def tokenizer(text_object):
+    tokens = word_tokenize(text_object)
+
+    return tokens
