@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 import re
 from nltk import pos_tag, pos_tag_sents
-from nltk.tokenize import word_tokenize
+from nltk.tokenize import word_tokenize, RegexpTokenizer
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet
@@ -59,6 +59,8 @@ contractions_dict = {"ain't": "are not", "'s": " is", "aren't": "are not",
 
 contractions = re.compile('(%s)' % '|'.join(contractions_dict.keys()))
 
+# Working Functions
+
 
 def expand_contractions(text, contractions_dict=contractions_dict):
     def replace(match):
@@ -78,6 +80,8 @@ def nltk_tag_to_wordnet_tag(nltk_tag):
     else:
         return None
 
+# Exported Functions
+
 
 def lemmatize_sentence(sentence):
     # tokenize the sentence and find the POS tag for each token
@@ -93,10 +97,21 @@ def lemmatize_sentence(sentence):
         else:
             # else use the tag to lemmatize the token
             lemmatized_sentence.append(lemmatizer.lemmatize(word, tag))
-    return " ".join(lemmatized_sentence)
+    return lemmatized_sentence
 
 
 def tokenizer(text_object):
     tokens = word_tokenize(text_object)
 
     return tokens
+
+# Testing Section
+
+
+def main():
+    test_sentence = 'Hello there, how are you doing today?'
+    print(lemmatize_sentence(test_sentence))
+
+
+if __name__ == '__main__':
+    main()
