@@ -13,11 +13,21 @@ def index():
 def tokenize():
 
     if request.method == 'POST':
-        corpus = request.form['sentence']
+        corpus = request.form['corpus']
         tokens = tokenizer(corpus)
         return jsonify({"tokens": tokens})
     else:
-        return jsonify({"message": "This is the GET route /tokenize"})
+        return jsonify({"Error": "This route only accpets POST methods. Please try again."})
+
+
+@app.route('/lemmatize', methods=['POST'])
+def lemmatize():
+    if request.method == 'POST':
+        corpus = request.form['corpus']
+        lemms = lemmatize_sentence(corpus)
+        return jsonify({"Lemms": lemms})
+    else:
+        return jsonify({"Error": "This route only accpets POST methods. Please try again."})
 
 
 if __name__ == '__main__':
