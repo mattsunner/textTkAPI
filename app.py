@@ -30,5 +30,16 @@ def lemmatize():
         return jsonify({"Error": "This route only accpets POST methods. Please try again."})
 
 
+@app.route('/contractions', methods=['POST'])
+def contractions():
+    if request.method == 'POST':
+        corpus = request.form['corpus']
+        corpus_clean = expand_contractions(corpus)
+
+        return jsonify({"Clean Corpus": corpus_clean})
+    else:
+        return jsonify({"Error": "This route only accpets POST methods. Please try again."})
+
+
 if __name__ == '__main__':
     app.run(debug=True)
