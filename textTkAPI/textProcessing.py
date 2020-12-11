@@ -82,10 +82,16 @@ def nltk_tag_to_wordnet_tag(nltk_tag):
 
 # Exported Functions
 
+def tokenizer(text_object):
+    tokenizer = nltk.RegexpTokenizer(r"\w+")
+    tokens = tokenizer.tokenize(text_object)
+
+    return tokens
+
 
 def lemmatize_sentence(sentence):
     # tokenize the sentence and find the POS tag for each token
-    nltk_tagged = nltk.pos_tag(nltk.word_tokenize(sentence))
+    nltk_tagged = nltk.pos_tag(tokenizer(sentence))
     # tuple of (token, wordnet_tag)
     wordnet_tagged = map(lambda x: (
         x[0], nltk_tag_to_wordnet_tag(x[1])), nltk_tagged)
@@ -99,12 +105,6 @@ def lemmatize_sentence(sentence):
             lemmatized_sentence.append(lemmatizer.lemmatize(word, tag))
     return lemmatized_sentence
 
-
-def tokenizer(text_object):
-    tokenizer = nltk.RegexpTokenizer(r"\w+")
-    tokens = tokenizer.tokenize(text_object)
-
-    return tokens
 
 
 def stemmer(text_object):
