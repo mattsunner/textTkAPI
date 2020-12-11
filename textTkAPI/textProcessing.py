@@ -65,7 +65,7 @@ contractions = re.compile('(%s)' % '|'.join(contractions_dict.keys()))
 def expand_contractions(text, contractions_dict=contractions_dict):
     def replace(match):
         return contractions_dict[match.group(0)]
-    return contractions.sub(replace, text)
+    return contractions.sub(replace, str.lower(text))
 
 
 def nltk_tag_to_wordnet_tag(nltk_tag):
