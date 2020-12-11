@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify
-from textTkAPI import expand_contractions, lemmatize_sentence, tokenizer
+from textTkAPI import expand_contractions, lemmatize_sentence, tokenizer, stemmer
 
 app = Flask(__name__)
 
@@ -35,6 +35,17 @@ def contractions():
     if request.method == 'POST':
         corpus = request.form['corpus']
         corpus_clean = expand_contractions(corpus)
+
+        return jsonify({"Clean Corpus": corpus_clean})
+    else:
+        return jsonify({"Error": "This route only accpets POST methods. Please try again."})
+
+
+@app.route('/stemmer', methods=['POST'])
+def stems():
+    if request.method == 'POST':
+        corpus = request.form['corpus']
+        corpus_clean = stemmer(corpus)
 
         return jsonify({"Clean Corpus": corpus_clean})
     else:

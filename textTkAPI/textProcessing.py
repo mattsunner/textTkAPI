@@ -101,16 +101,30 @@ def lemmatize_sentence(sentence):
 
 
 def tokenizer(text_object):
-    tokens = word_tokenize(text_object)
+    tokenizer = nltk.RegexpTokenizer(r"\w+")
+    tokens = tokenizer.tokenize(text_object)
 
     return tokens
+
+
+def stemmer(text_object):
+    stemmer = PorterStemmer()
+
+    tokens = tokenizer(text_object)
+    stems = []
+
+    for word in tokens:
+        stems.append(stemmer.stem(word))
+
+    return stems
+
 
 # Testing Section
 
 
 def main():
-    test_sentence = 'Hello there, how are you doing today?'
-    print(lemmatize_sentence(test_sentence))
+    test_sentence = 'Running, is a great habit.'
+    print(stemmer(test_sentence))
 
 
 if __name__ == '__main__':
