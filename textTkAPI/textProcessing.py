@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 import re
 from nltk import pos_tag, pos_tag_sents
-from nltk.tokenize import word_tokenize
+from nltk.tokenize import word_tokenize, RegexpTokenizer
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet
@@ -59,11 +59,13 @@ contractions_dict = {"ain't": "are not", "'s": " is", "aren't": "are not",
 
 contractions = re.compile('(%s)' % '|'.join(contractions_dict.keys()))
 
+# Working Functions
+
 
 def expand_contractions(text, contractions_dict=contractions_dict):
     def replace(match):
         return contractions_dict[match.group(0)]
-    return contractions.sub(replace, text)
+    return contractions.sub(replace, str.lower(text))
 
 
 def nltk_tag_to_wordnet_tag(nltk_tag):
@@ -78,10 +80,18 @@ def nltk_tag_to_wordnet_tag(nltk_tag):
     else:
         return None
 
+# Exported Functions
+
+def tokenizer(text_object):
+    tokenizer = nltk.RegexpTokenizer(r"\w+")
+    tokens = tokenizer.tokenize(text_object)
+
+    return tokens
+
 
 def lemmatize_sentence(sentence):
     # tokenize the sentence and find the POS tag for each token
-    nltk_tagged = nltk.pos_tag(nltk.word_tokenize(sentence))
+    nltk_tagged = nltk.pos_tag(tokenizer(sentence))
     # tuple of (token, wordnet_tag)
     wordnet_tagged = map(lambda x: (
         x[0], nltk_tag_to_wordnet_tag(x[1])), nltk_tagged)
@@ -93,4 +103,29 @@ def lemmatize_sentence(sentence):
         else:
             # else use the tag to lemmatize the token
             lemmatized_sentence.append(lemmatizer.lemmatize(word, tag))
-    return " ".join(lemmatized_sentence)
+    return lemmatized_sentence
+
+
+
+def stemmer(text_object):
+    stemmer = PorterStemmer()
+
+    tokens = tokenizer(text_object)
+    stems = []
+
+    for word in tokens:
+        stems.append(stemmer.stem(word))
+
+    return stems
+
+
+# Testing Section
+
+
+def main():
+    test_sentence = 'Running, is a great habit.'
+    print(stemmer(test_sentence))
+
+
+if __name__ == '__main__':
+    main()
