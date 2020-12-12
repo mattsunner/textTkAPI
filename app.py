@@ -9,7 +9,7 @@ def index():
     return jsonify({"message": "Success!"})
 
 
-@app.route('/tokenize', methods=['GET', 'POST'])
+@app.route('/api/v1/routes/tokenize', methods=['GET', 'POST'])
 def tokenize():
 
     if request.method == 'POST':
@@ -20,7 +20,7 @@ def tokenize():
         return jsonify({"Error": "This route only accpets POST methods. Please try again."})
 
 
-@app.route('/lemmatize', methods=['POST'])
+@app.route('/api/v1/routes/lemmatize', methods=['POST'])
 def lemmatize():
     if request.method == 'POST':
         corpus = request.form['corpus']
@@ -30,7 +30,7 @@ def lemmatize():
         return jsonify({"Error": "This route only accpets POST methods. Please try again."})
 
 
-@app.route('/contractions', methods=['POST'])
+@app.route('/api/v1/routes/contractions', methods=['POST'])
 def contractions():
     if request.method == 'POST':
         corpus = request.form['corpus']
@@ -41,7 +41,7 @@ def contractions():
         return jsonify({"Error": "This route only accpets POST methods. Please try again."})
 
 
-@app.route('/stemmer', methods=['POST'])
+@app.route('/api/v1/routes/stem', methods=['POST'])
 def stems():
     if request.method == 'POST':
         corpus = request.form['corpus']
